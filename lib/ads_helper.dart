@@ -10,7 +10,7 @@ export 'banner_ad/banner_ad.dart';
 export 'utils/ad_config.dart';
 
 class AdsHelper {
-  void showInterstitialAds() {
+  static void showInterstitialAds() {
     if (AdConfig.isAdFeatureEnable) {
       InterstitialAdUtils.showInterstitialAds();
     } else {
@@ -18,7 +18,7 @@ class AdsHelper {
     }
   }
 
-  Future<void> showRewardedAd(Function adShowSuccess) async {
+  static Future<void> showRewardedAd({required Function adShowSuccess}) async {
     if (AdConfig.isAdFeatureEnable) {
       await RewardedAdUtils.showRewardedAd(adShowSuccess: adShowSuccess);
     } else {

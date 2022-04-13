@@ -13,7 +13,7 @@ class BannerAdView extends StatefulWidget {
 }
 
 class _BannerAdViewState extends State<BannerAdView> {
-  late BannerAd? _anchoredBanner;
+  BannerAd? _anchoredBanner;
   bool _loadingAnchoredBanner = false;
 
   @override
