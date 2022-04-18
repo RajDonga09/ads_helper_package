@@ -29,7 +29,12 @@ class InterstitialAdUtils {
   }
 
   static _loadFacebookAd(InterstitialType adsType) {
+    if (_isFacebookInterstitialAdLoaded) {
+      return;
+    }
+
     printLog('------ Facebook InterstitialAd Ad LOADING ------');
+
     FacebookInterstitialAd.loadInterstitialAd(
       placementId: AdConfig.facebookInterstitialAdAdUnitId,
       listener: (result, value) {
@@ -63,6 +68,10 @@ class InterstitialAdUtils {
   }
 
   static loadAdMobAd(InterstitialType adsType) {
+    if (_adMobInterstitialAd != null) {
+      return;
+    }
+
     printLog('------ AdMob InterstitialAd Ad LOADING ------');
     InterstitialAd.load(
       adUnitId: AdConfig.adMobInterstitialAdUnitId,

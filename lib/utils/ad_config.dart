@@ -13,17 +13,17 @@ class AdConfig {
 
   AdConfig._internal();
 
-  static late String adMobBannerAdUnitId; // admob_banner_ad_unitId
-  static late String facebookBannerAdUnitId; // facebook_banner_ad_unitId
-  static late String adMobInterstitialAdUnitId; // admob_interstitial_ad_unitId
-  static late String facebookInterstitialAdAdUnitId; // facebook_interstitial_ad_unitId
-  static late String adMobRewardedAdUnitId; // admob_rewarded_ad_unitId
-  static late String facebookRewardedAdUnitId; // facebook_rewarded_ad_unitId
-  static late bool isShowFacebookBannerAds; // isShow_facebook_banner_ads
-  static late bool isShowFacebookInterstitialAd; // isShow_facebook_interstitial_ad
-  static late bool isProFeatureEnable; // isPro_feature_enable
-  static late int coolDownsTaps; // cool_downs_taps
-  static late bool isAdFeatureEnable; // isAd_feature_enable
+  static String adMobBannerAdUnitId = ''; // admob_banner_ad_unitId
+  static String facebookBannerAdUnitId = ''; // facebook_banner_ad_unitId
+  static String adMobInterstitialAdUnitId = ''; // admob_interstitial_ad_unitId
+  static String facebookInterstitialAdAdUnitId = ''; // facebook_interstitial_ad_unitId
+  static String adMobRewardedAdUnitId = ''; // admob_rewarded_ad_unitId
+  static String facebookRewardedAdUnitId = ''; // facebook_rewarded_ad_unitId
+  static bool isShowFacebookBannerAds = false; // isShow_facebook_banner_ads
+  static bool isShowFacebookInterstitialAd = false; // isShow_facebook_interstitial_ad
+  static bool isProFeatureEnable = false; // isPro_feature_enable
+  static int coolDownsTaps = 3; // cool_downs_taps
+  static bool isAdFeatureEnable = false; // isAd_feature_enable
 
   // static int firstCoolDowns = 30;
   // static int secondCoolDowns = 60;
@@ -63,8 +63,12 @@ class AdConfig {
 
     /// Load Ads
     if (isAdFeatureEnable) {
-      InterstitialAdUtils.loadInterstitialAd();
-      RewardedAdUtils.loadRewardedAd();
+      loadAds();
     }
+  }
+
+  void loadAds() {
+    InterstitialAdUtils.loadInterstitialAd();
+    RewardedAdUtils.loadRewardedAd();
   }
 }
