@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:ads_helper/interstitial_ad/interstitial_ad.dart';
 import 'package:ads_helper/rewarded_ad/rewarded_ad.dart';
+import 'package:ads_helper/utils/utils.dart';
+import 'package:facebook_audience_network/facebook_audience_network.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class AdConfig {
@@ -21,9 +23,11 @@ class AdConfig {
   static String facebookRewardedAdUnitId = ''; // facebook_rewarded_ad_unitId
   static bool isShowFacebookBannerAds = false; // isShow_facebook_banner_ads
   static bool isShowFacebookInterstitialAd = false; // isShow_facebook_interstitial_ad
+  static bool isShowFacebookRewardAd = false; // isShow_facebook_reward_ad
   static bool isProFeatureEnable = false; // isPro_feature_enable
   static int coolDownsTaps = 3; // cool_downs_taps
   static bool isAdFeatureEnable = false; // isAd_feature_enable
+  static bool isShowFacebookTestAd = false; // isShow_facebook_test_ad
 
   // static int firstCoolDowns = 30;
   // static int secondCoolDowns = 60;
@@ -36,10 +40,12 @@ class AdConfig {
     required String adMobRewardAdId,
     required String facebookRewardAdId,
     required bool proFutureEnable,
-    bool isShowFaceBookBannerAd = false,
-    bool showFacebookInterstitialAd = false,
+    bool isShowFaceBookBannerAd = true,
+    bool showFacebookInterstitialAd = true,
+    bool showFacebookRewardedAd = true,
     bool adFeatureEnable = true,
     int coolDownsTap = 3,
+    bool showFacebookTestAd = false,
     // int? firstCoolDown,
     // int? secondCoolDown,
   }) async {
@@ -51,15 +57,26 @@ class AdConfig {
     facebookRewardedAdUnitId = facebookRewardAdId;
     isShowFacebookBannerAds = isShowFaceBookBannerAd;
     isShowFacebookInterstitialAd = showFacebookInterstitialAd;
+    isShowFacebookRewardAd = showFacebookRewardedAd;
     isProFeatureEnable = proFutureEnable;
     isProFeatureEnable = proFutureEnable;
     isAdFeatureEnable = adFeatureEnable;
     coolDownsTaps = coolDownsTap;
+    isShowFacebookTestAd = showFacebookTestAd;
     // if (firstCoolDown != null) firstCoolDowns = firstCoolDown;
     // if (firstCoolDown != null) secondCoolDowns = firstCoolDown;
 
     log("AdDetails adMobBannerAdUnitId: $adMobBannerAdUnitId facebookBannerAdUnitId: $facebookBannerAdUnitId");
     MobileAds.instance.initialize();
+
+    /// Test ADS
+    if (isShowFacebookTestAd) {
+      printLog('!!!!!!!!!!! LOAD TESTING ADS !!!!!!!!!!!!!');
+      FacebookAudienceNetwork.init(
+        testingId: "ab1ef4f1-3d61-4d74-a479-619665bd481b", // One Plush Nord (Raj) ID
+        iOSAdvertiserTrackingEnabled: true,
+      );
+    }
 
     /// Load Ads
     if (isAdFeatureEnable) {
@@ -69,6 +86,6 @@ class AdConfig {
 
   void loadAds() {
     InterstitialAdUtils.loadInterstitialAd();
-    RewardedAdUtils.loadRewardedAd();
+    RewardedAdUtils.loadRewardAd();
   }
 }

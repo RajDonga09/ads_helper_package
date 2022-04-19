@@ -1,1 +1,1 @@
-enum InterstitialType { adMob, faceBook }
+enum AdType { adMob, faceBook }

@@ -1,6 +1,5 @@
 import 'package:ads_helper/utils/ad_config.dart';
 import 'package:ads_helper/utils/constants.dart';
-import 'package:ads_helper/utils/ennum.dart';
 import 'package:ads_helper/utils/utils.dart';
 import 'package:facebook_audience_network/facebook_audience_network.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -16,19 +15,20 @@ class InterstitialAdUtils {
 
   static InterstitialAd? _adMobInterstitialAd;
   static bool _isFacebookInterstitialAdLoaded = false;
-  static int _numInterstitialLoadAttempts = 0;
+  static int _numAdmobInterstitialLoadAttempts = 0;
+  static int _numFacebookInterstitialLoadAttempts = 0;
   static int _currentCoolDownsTap = 0;
 
   static void loadInterstitialAd() async {
     printLog('-----### Load Interstitial Ads ###------');
     if (AdConfig.isShowFacebookInterstitialAd && AdConfig.facebookInterstitialAdAdUnitId.isNotEmpty) {
-      _loadFacebookAd(InterstitialType.faceBook);
+      _loadFacebookAd();
     } else {
-      loadAdMobAd(InterstitialType.adMob);
+      _loadAdMobAd();
     }
   }
 
-  static _loadFacebookAd(InterstitialType adsType) {
+  static _loadFacebookAd() {
     if (_isFacebookInterstitialAdLoaded) {
       return;
     }
@@ -57,8 +57,11 @@ class InterstitialAdUtils {
           case InterstitialAdResult.ERROR:
             printLog('Facebook InterstitialAd Ad ERROR: $value');
             _isFacebookInterstitialAdLoaded = false;
-            if (adsType != InterstitialType.adMob) {
-              loadAdMobAd(InterstitialType.faceBook);
+            _numFacebookInterstitialLoadAttempts += 1;
+            if (_numFacebookInterstitialLoadAttempts <= Constant.maxFailedLoadAttempts) {
+              loadInterstitialAd();
+            } else {
+              _loadAdMobAd();
             }
             break;
           default:
@@ -67,12 +70,13 @@ class InterstitialAdUtils {
     );
   }
 
-  static loadAdMobAd(InterstitialType adsType) {
+  static _loadAdMobAd() {
     if (_adMobInterstitialAd != null) {
       return;
     }
 
     printLog('------ AdMob InterstitialAd Ad LOADING ------');
+
     InterstitialAd.load(
       adUnitId: AdConfig.adMobInterstitialAdUnitId,
       request: Constant.request,
@@ -80,17 +84,16 @@ class InterstitialAdUtils {
         onAdLoaded: (InterstitialAd ad) {
           printLog('AdMob InterstitialAd Ad onAdLoaded:');
           _adMobInterstitialAd = ad;
-          _numInterstitialLoadAttempts = 0;
+          _numAdmobInterstitialLoadAttempts = 0;
         },
         onAdFailedToLoad: (LoadAdError error) {
           printLog('AdMob InterstitialAd Ad onAdFailedToLoad:');
-          if (adsType != InterstitialType.faceBook) {
-            _loadFacebookAd(InterstitialType.adMob);
-          }
-          _numInterstitialLoadAttempts += 1;
+          _numAdmobInterstitialLoadAttempts += 1;
           _adMobInterstitialAd = null;
-          if (_numInterstitialLoadAttempts <= Constant.maxFailedLoadAttempts) {
+          if (_numAdmobInterstitialLoadAttempts <= Constant.maxFailedLoadAttempts) {
             loadInterstitialAd();
+          } else {
+            _loadFacebookAd();
           }
         },
       ),
