@@ -10,9 +10,9 @@ export 'banner_ad/banner_ad.dart';
 export 'utils/ad_config.dart';
 
 class AdsHelper {
-  static void showInterstitialAds() {
+  static void showInterstitialAds({Function()? adCloseEvent}) {
     if (AdConfig.isAdFeatureEnable) {
-      InterstitialAdUtils.showInterstitialAds();
+      InterstitialAdUtils.showInterstitialAds(adCloseEvent: adCloseEvent);
     } else {
       printLog("Warning: Ads Feature is Disable");
     }

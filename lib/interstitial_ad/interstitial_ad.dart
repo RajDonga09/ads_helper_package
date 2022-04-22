@@ -18,12 +18,13 @@ class InterstitialAdUtils {
   static int _numAdmobInterstitialLoadAttempts = 0;
   static int _numFacebookInterstitialLoadAttempts = 0;
   static int _currentCoolDownsTap = 0;
+  static Function()? adClose;
 
   static void loadInterstitialAd() async {
     printLog('-----### Load Interstitial Ads ###------');
     if (AdConfig.isShowFacebookInterstitialAd && AdConfig.facebookInterstitialAdAdUnitId.isNotEmpty) {
       _loadFacebookAd();
-    } else {
+    } else if (AdConfig.isShowAllAdmobAds) {
       _loadAdMobAd();
     }
   }
@@ -48,19 +49,25 @@ class InterstitialAdUtils {
             break;
           case InterstitialAdResult.DISMISSED:
             printLog('Facebook InterstitialAd Ad DISMISSED:');
+            if (adClose != null) {
+              adClose!.call();
+            }
             _isFacebookInterstitialAdLoaded = false;
-            loadInterstitialAd();
+            _loadFacebookAd();
             break;
           case InterstitialAdResult.CLICKED:
             printLog('Facebook InterstitialAd Ad CLICKED:');
             break;
           case InterstitialAdResult.ERROR:
             printLog('Facebook InterstitialAd Ad ERROR: $value');
+            if (adClose != null) {
+              adClose!.call();
+            }
             _isFacebookInterstitialAdLoaded = false;
             _numFacebookInterstitialLoadAttempts += 1;
             if (_numFacebookInterstitialLoadAttempts <= Constant.maxFailedLoadAttempts) {
-              loadInterstitialAd();
-            } else {
+              _loadFacebookAd();
+            } else if (AdConfig.isShowAllAdmobAds && _numAdmobInterstitialLoadAttempts <= Constant.maxFailedLoadAttempts) {
               _loadAdMobAd();
             }
             break;
@@ -91,8 +98,8 @@ class InterstitialAdUtils {
           _numAdmobInterstitialLoadAttempts += 1;
           _adMobInterstitialAd = null;
           if (_numAdmobInterstitialLoadAttempts <= Constant.maxFailedLoadAttempts) {
-            loadInterstitialAd();
-          } else {
+            _loadAdMobAd();
+          } else if (_numFacebookInterstitialLoadAttempts <= Constant.maxFailedLoadAttempts) {
             _loadFacebookAd();
           }
         },
@@ -100,8 +107,9 @@ class InterstitialAdUtils {
     );
   }
 
-  static showInterstitialAds() {
-    if (_currentCoolDownsTap <= 0) {
+  static showInterstitialAds({Function()? adCloseEvent}) {
+    adClose = adCloseEvent;
+    if (_currentCoolDownsTap <= 0 || adClose != null) {
       if (_adMobInterstitialAd != null) {
         _adMobInterstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
           onAdShowedFullScreenContent: (InterstitialAd ad) {
@@ -109,13 +117,19 @@ class InterstitialAdUtils {
           },
           onAdDismissedFullScreenContent: (InterstitialAd ad) {
             printLog('AdMob InterstitialAd Ad onAdDismissedFullScreenContent:');
+            if (adClose != null) {
+              adClose!.call();
+            }
             ad.dispose();
-            loadInterstitialAd();
+            _loadAdMobAd();
           },
           onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
             printLog('AdMob InterstitialAd Ad onAdFailedToShowFullScreenContent: $error');
+            if (adClose != null) {
+              adClose!.call();
+            }
             ad.dispose();
-            loadInterstitialAd();
+            _loadAdMobAd();
           },
         );
         _adMobInterstitialAd!.show();
@@ -124,6 +138,10 @@ class InterstitialAdUtils {
       } else if (_isFacebookInterstitialAdLoaded) {
         FacebookInterstitialAd.showInterstitialAd();
         _currentCoolDownsTap = AdConfig.coolDownsTaps;
+      } else {
+        if (adClose != null) {
+          adClose!.call();
+        }
       }
     } else {
       _currentCoolDownsTap--;

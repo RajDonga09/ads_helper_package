@@ -28,6 +28,8 @@ class AdConfig {
   static int coolDownsTaps = 3; // cool_downs_taps
   static bool isAdFeatureEnable = false; // isAd_feature_enable
   static bool isShowFacebookTestAd = false; // isShow_facebook_test_ad
+  static bool isShowButtonAd = false; // isShow_button_ad
+  static bool isShowAllAdmobAds = false; // isShow_all_admob_ad
 
   // static int firstCoolDowns = 30;
   // static int secondCoolDowns = 60;
@@ -46,6 +48,8 @@ class AdConfig {
     bool adFeatureEnable = true,
     int coolDownsTap = 3,
     bool showFacebookTestAd = false,
+    bool showButtonAd = false,
+    bool showAllAdmobAds = false,
     // int? firstCoolDown,
     // int? secondCoolDown,
   }) async {
@@ -63,6 +67,8 @@ class AdConfig {
     isAdFeatureEnable = adFeatureEnable;
     coolDownsTaps = coolDownsTap;
     isShowFacebookTestAd = showFacebookTestAd;
+    isShowButtonAd = showButtonAd;
+    isShowAllAdmobAds = showAllAdmobAds;
     // if (firstCoolDown != null) firstCoolDowns = firstCoolDown;
     // if (firstCoolDown != null) secondCoolDowns = firstCoolDown;
 

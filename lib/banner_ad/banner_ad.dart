@@ -27,7 +27,7 @@ class _BannerAdViewState extends State<BannerAdView> {
     return (AdConfig.isAdFeatureEnable)
         ? (AdConfig.isShowFacebookBannerAds && (AdConfig.facebookBannerAdUnitId.isNotEmpty))
             ? Container(
-                height: Constant.bannerAdHeight,
+                // height: Constant.bannerAdHeight,
                 alignment: const Alignment(0.5, 1),
                 child: FacebookBannerAd(
                   placementId: AdConfig.facebookBannerAdUnitId,

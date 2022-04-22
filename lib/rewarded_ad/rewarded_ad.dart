@@ -23,7 +23,7 @@ class RewardedAdUtils {
     printLog('-----### Load Reward Ads ###------');
     if (AdConfig.isShowFacebookRewardAd && AdConfig.facebookRewardedAdUnitId.isNotEmpty) {
       _loadFacebookRewardedAd();
-    } else {
+    } else if (AdConfig.isShowAllAdmobAds) {
       _loadAdmobRewardedAd();
     }
   }
@@ -34,7 +34,7 @@ class RewardedAdUtils {
       return;
     }
 
-    printLog('-----### Load Facebook Reward Ads ###------');
+    printLog('----- Facebook Reward Ads Loading ------');
     FacebookRewardedVideoAd.loadRewardedVideoAd(
       placementId: AdConfig.facebookRewardedAdUnitId,
       listener: (result, value) {
@@ -42,16 +42,17 @@ class RewardedAdUtils {
           case RewardedVideoAdResult.LOADED:
             printLog('Facebook Reward Ad LOADED:');
             _isFacebookRewardedAdLoaded = true;
+            _numFacebookRewardedAdLoadAttempts = 0;
             break;
           case RewardedVideoAdResult.VIDEO_COMPLETE:
             printLog('Facebook Reward Ad VIDEO_COMPLETE:');
-            _adShowSuccess?.call();
             break;
           case RewardedVideoAdResult.VIDEO_CLOSED:
             printLog('Facebook Reward Ad VIDEO_CLOSED:');
+            _adShowSuccess?.call();
             if ((value == true || value["invalidated"] == true)) {
               _isFacebookRewardedAdLoaded = false;
-              loadRewardAd();
+              _loadFacebookRewardedAd();
             }
             break;
           case RewardedVideoAdResult.CLICKED:
@@ -62,8 +63,8 @@ class RewardedAdUtils {
             _isFacebookRewardedAdLoaded = false;
             _numFacebookRewardedAdLoadAttempts += 1;
             if (_numFacebookRewardedAdLoadAttempts <= Constant.maxFailedLoadAttempts) {
-              loadRewardAd();
-            } else {
+              _loadFacebookRewardedAd();
+            } else if (AdConfig.isShowAllAdmobAds && _numAdmobRewardedAdLoadAttempts <= Constant.maxFailedLoadAttempts) {
               _loadAdmobRewardedAd();
             }
             break;
@@ -78,23 +79,24 @@ class RewardedAdUtils {
       printLog('Pro Feature is Disable');
       return;
     }
-    printLog('-----### Load Admob Rewarded Ads ###------');
+
+    printLog('----- Admob Rewarded Ads Loading------');
     RewardedAd.load(
       adUnitId: AdConfig.adMobRewardedAdUnitId,
-      // adUnitId: RewardedAd.testAdUnitId,
       request: Constant.request,
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (RewardedAd ad) {
           printLog('AdMob Rewarded onAdLoaded:');
           _rewardAd = ad;
+          _numAdmobRewardedAdLoadAttempts = 0;
         },
         onAdFailedToLoad: (LoadAdError error) {
           printLog('AdMob Rewarded onAdFailedToLoad: $error');
           _numAdmobRewardedAdLoadAttempts += 1;
           _rewardAd = null;
           if (_numAdmobRewardedAdLoadAttempts <= Constant.maxFailedLoadAttempts) {
-            loadRewardAd();
-          } else {
+            _loadAdmobRewardedAd();
+          } else if (_numFacebookRewardedAdLoadAttempts <= Constant.maxFailedLoadAttempts) {
             _loadFacebookRewardedAd();
           }
         },
@@ -116,12 +118,12 @@ class RewardedAdUtils {
         onAdDismissedFullScreenContent: (RewardedAd ad) {
           printLog('AdMob Rewarded onAdDismissedFullScreenContent:');
           ad.dispose();
-          loadRewardAd();
+          _loadAdmobRewardedAd();
         },
         onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) async {
           printLog('AdMob Rewarded onAdFailedToShowFullScreenContent: $error');
           ad.dispose();
-          loadRewardAd();
+          _loadAdmobRewardedAd();
         },
       );
 
