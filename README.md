@@ -68,19 +68,16 @@ TODO: Show Interstitial Ads
 
 ```dart
   AdsHelper.showInterstitialAds(adCloseEvent: () {
-   print('Close ad event);
-});
+    print('Close ad event);
+  });
 ```
 
 TODO: Show Rewarded Ads
 
 ```dart
   AdsHelper.showRewardedAd(adShowSuccess: () {
-  /// Pro Mode Disable
-  print('Ad Show Success);
-  return;
-});
-});
+    print("Show Success Ad");
+  });
 ```
 ## Additional information
 
