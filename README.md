@@ -25,13 +25,60 @@ start using the package.
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
+TODO: Add in ymla file
 
 ```dart
-const like = 'sample';
+  ads_helper:
+    git:
+      url: https://github.com/RajDonga09/ads_helper_package.git
+      ref: master
 ```
 
+TODO: Add in main.dart
+
+```dart
+  Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  try {
+    await AdConfig().init(
+      adMobBannerId: '',
+      adMobInterstitialAdId: '',
+      adMobRewardAdId: '',
+      faceBookBannerId: '',
+      faceBookInterstitialAdId: '',
+      facebookRewardAdId: '',
+      isShowFaceBookBannerAd: false,
+      showFacebookInterstitialAd: false,
+      showFacebookRewardedAd: false,
+      showFacebookTestAd: false,
+      coolDownsTap: 2,
+      proFutureEnable: false,
+      adFeatureEnable: true,
+      showButtonAd: false,
+      showAllAdmobAds: true,
+    );
+  } catch (e) {
+    print('!!!!!!!!! Error AdConfig $e');
+  }
+}  
+```
+
+TODO: Show Interstitial Ads
+
+```dart
+  AdsHelper.showInterstitialAds(adCloseEvent: () {
+    print('Close ad event);
+  });
+```
+
+TODO: Show Rewarded Ads
+
+```dart
+  AdsHelper.showRewardedAd(adShowSuccess: () {
+    print("Show Success Ad");
+  });
+```
 ## Additional information
 
 TODO: Tell users more about the package: where to find more information, how to 
