@@ -64,10 +64,10 @@ class InterstitialAdUtils {
               adClose!.call();
             }
             _isFacebookInterstitialAdLoaded = false;
-            _numFacebookInterstitialLoadAttempts += 1;
-            if (_numFacebookInterstitialLoadAttempts <= Constant.maxFailedLoadAttempts) {
+            _numFacebookInterstitialLoadAttempts++;
+            if (_numFacebookInterstitialLoadAttempts < AdConfig.maxFailedLoadAttempts) {
               _loadFacebookAd();
-            } else if (AdConfig.isShowAllAdmobAds && _numAdmobInterstitialLoadAttempts <= Constant.maxFailedLoadAttempts) {
+            } else if (AdConfig.isShowAllAdmobAds && _numAdmobInterstitialLoadAttempts < AdConfig.maxFailedLoadAttempts) {
               _loadAdMobAd();
             }
             break;
@@ -95,11 +95,11 @@ class InterstitialAdUtils {
         },
         onAdFailedToLoad: (LoadAdError error) {
           printLog('AdMob InterstitialAd Ad onAdFailedToLoad:');
-          _numAdmobInterstitialLoadAttempts += 1;
+          _numAdmobInterstitialLoadAttempts++;
           _adMobInterstitialAd = null;
-          if (_numAdmobInterstitialLoadAttempts <= Constant.maxFailedLoadAttempts) {
+          if (_numAdmobInterstitialLoadAttempts < AdConfig.maxFailedLoadAttempts) {
             _loadAdMobAd();
-          } else if (_numFacebookInterstitialLoadAttempts <= Constant.maxFailedLoadAttempts) {
+          } else if (_numFacebookInterstitialLoadAttempts < AdConfig.maxFailedLoadAttempts) {
             _loadFacebookAd();
           }
         },

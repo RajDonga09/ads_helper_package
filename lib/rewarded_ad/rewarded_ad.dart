@@ -61,10 +61,10 @@ class RewardedAdUtils {
           case RewardedVideoAdResult.ERROR:
             printLog('Facebook Reward Ad ERROR: $value');
             _isFacebookRewardedAdLoaded = false;
-            _numFacebookRewardedAdLoadAttempts += 1;
-            if (_numFacebookRewardedAdLoadAttempts <= Constant.maxFailedLoadAttempts) {
+            _numFacebookRewardedAdLoadAttempts++;
+            if (_numFacebookRewardedAdLoadAttempts < AdConfig.maxFailedLoadAttempts) {
               _loadFacebookRewardedAd();
-            } else if (AdConfig.isShowAllAdmobAds && _numAdmobRewardedAdLoadAttempts <= Constant.maxFailedLoadAttempts) {
+            } else if (AdConfig.isShowAllAdmobAds && _numAdmobRewardedAdLoadAttempts < AdConfig.maxFailedLoadAttempts) {
               _loadAdmobRewardedAd();
             }
             break;
@@ -92,11 +92,11 @@ class RewardedAdUtils {
         },
         onAdFailedToLoad: (LoadAdError error) {
           printLog('AdMob Rewarded onAdFailedToLoad: $error');
-          _numAdmobRewardedAdLoadAttempts += 1;
+          _numAdmobRewardedAdLoadAttempts++;
           _rewardAd = null;
-          if (_numAdmobRewardedAdLoadAttempts <= Constant.maxFailedLoadAttempts) {
+          if (_numAdmobRewardedAdLoadAttempts < AdConfig.maxFailedLoadAttempts) {
             _loadAdmobRewardedAd();
-          } else if (_numFacebookRewardedAdLoadAttempts <= Constant.maxFailedLoadAttempts) {
+          } else if (_numFacebookRewardedAdLoadAttempts < AdConfig.maxFailedLoadAttempts) {
             _loadFacebookRewardedAd();
           }
         },
