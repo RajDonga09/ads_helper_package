@@ -25,7 +25,7 @@ class _BannerAdViewState extends State<BannerAdView> {
   @override
   Widget build(BuildContext context) {
     return (AdConfig.isAdFeatureEnable)
-        ? (AdConfig.isShowFacebookBannerAds && (AdConfig.facebookBannerAdUnitId.isNotEmpty))
+        ? ((AdConfig.isShowFacebookBannerAds && (AdConfig.facebookBannerAdUnitId.isNotEmpty)) || Constant.isFailedAdMobBannerAd)
             ? Container(
                 // height: Constant.bannerAdHeight,
                 alignment: const Alignment(0.5, 1),
@@ -94,6 +94,9 @@ class _BannerAdViewState extends State<BannerAdView> {
         },
         onAdFailedToLoad: (Ad ad, LoadAdError error) {
           printLog('AdMob Banner Ad failedToLoad: $error');
+          setState(() {
+            Constant.isFailedAdMobBannerAd = true;
+          });
           ad.dispose();
         },
         onAdImpression: (Ad ad) {

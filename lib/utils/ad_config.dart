@@ -30,6 +30,7 @@ class AdConfig {
   static bool isShowFacebookTestAd = false; // isShow_facebook_test_ad
   static bool isShowButtonAd = false; // isShow_button_ad
   static bool isShowAllAdmobAds = false; // isShow_all_admob_ad
+  static int maxFailedLoadAttempts = 1; // max_failed_load_attempts
 
   // static int firstCoolDowns = 30;
   // static int secondCoolDowns = 60;
@@ -50,6 +51,7 @@ class AdConfig {
     bool showFacebookTestAd = false,
     bool showButtonAd = false,
     bool showAllAdmobAds = false,
+    int maxFailedLoad = 1,
     // int? firstCoolDown,
     // int? secondCoolDown,
   }) async {
@@ -69,6 +71,7 @@ class AdConfig {
     isShowFacebookTestAd = showFacebookTestAd;
     isShowButtonAd = showButtonAd;
     isShowAllAdmobAds = showAllAdmobAds;
+    maxFailedLoadAttempts = maxFailedLoad;
     // if (firstCoolDown != null) firstCoolDowns = firstCoolDown;
     // if (firstCoolDown != null) secondCoolDowns = firstCoolDown;
 
@@ -92,6 +95,8 @@ class AdConfig {
 
   void loadAds() {
     InterstitialAdUtils.loadInterstitialAd();
-    RewardedAdUtils.loadRewardAd();
+    if (isProFeatureEnable) {
+      RewardedAdUtils.loadRewardAd();
+    }
   }
 }
