@@ -16,7 +16,7 @@ class AdConfig {
 
   AdConfig._internal();
 
-  static String adMobAppOpenAdUnitId = ''; // admob_app_open_ad_unitId TODO: Add Firebase Config
+  static String adMobAppOpenAdUnitId = ''; // admob_app_open_ad_unitId
   static String adMobBannerAdUnitId = ''; // admob_banner_ad_unitId
   static String facebookBannerAdUnitId = ''; // facebook_banner_ad_unitId
   static String adMobInterstitialAdUnitId = ''; // admob_interstitial_ad_unitId
@@ -33,7 +33,7 @@ class AdConfig {
   static bool isShowButtonAd = false; // isShow_button_ad
   static bool isShowAllAdmobAds = false; // isShow_all_admob_ad
   static int maxFailedLoadAttempts = 1; // max_failed_load_attempts
-  static bool isShowAppOpenAd = false; // isShow_app_open_ad  TODO: Add Firebase Config
+  static bool isShowAppOpenAd = false; // isShow_app_open_ad
 
   // static int firstCoolDowns = 30;
   // static int secondCoolDowns = 60;
