@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:ads_helper/app_open_ad/app_open_ad.dart';
 import 'package:ads_helper/interstitial_ad/interstitial_ad.dart';
 import 'package:ads_helper/rewarded_ad/rewarded_ad.dart';
 import 'package:ads_helper/utils/utils.dart';
@@ -15,6 +16,7 @@ class AdConfig {
 
   AdConfig._internal();
 
+  static String adMobAppOpenAdUnitId = ''; // admob_app_open_ad_unitId TODO: Add Firebase Config
   static String adMobBannerAdUnitId = ''; // admob_banner_ad_unitId
   static String facebookBannerAdUnitId = ''; // facebook_banner_ad_unitId
   static String adMobInterstitialAdUnitId = ''; // admob_interstitial_ad_unitId
@@ -31,11 +33,13 @@ class AdConfig {
   static bool isShowButtonAd = false; // isShow_button_ad
   static bool isShowAllAdmobAds = false; // isShow_all_admob_ad
   static int maxFailedLoadAttempts = 1; // max_failed_load_attempts
+  static bool isShowAppOpenAd = false; // isShow_app_open_ad  TODO: Add Firebase Config
 
   // static int firstCoolDowns = 30;
   // static int secondCoolDowns = 60;
 
   Future<void> init({
+    required String adMobAdOpenId,
     required String adMobBannerId,
     required String faceBookBannerId,
     required String adMobInterstitialAdId,
@@ -52,9 +56,11 @@ class AdConfig {
     bool showButtonAd = false,
     bool showAllAdmobAds = false,
     int maxFailedLoad = 1,
+    bool showAppOpenAd = false,
     // int? firstCoolDown,
     // int? secondCoolDown,
   }) async {
+    adMobAppOpenAdUnitId = adMobAdOpenId;
     adMobBannerAdUnitId = adMobBannerId;
     facebookBannerAdUnitId = faceBookBannerId;
     adMobInterstitialAdUnitId = adMobInterstitialAdId;
@@ -72,6 +78,7 @@ class AdConfig {
     isShowButtonAd = showButtonAd;
     isShowAllAdmobAds = showAllAdmobAds;
     maxFailedLoadAttempts = maxFailedLoad;
+    isShowAppOpenAd = showAppOpenAd;
     // if (firstCoolDown != null) firstCoolDowns = firstCoolDown;
     // if (firstCoolDown != null) secondCoolDowns = firstCoolDown;
 
@@ -89,14 +96,16 @@ class AdConfig {
 
     /// Load Ads
     if (isAdFeatureEnable) {
-      loadAds();
-    }
-  }
+      /// App Open Ad
+      AppOpenAdUtils.loadAppOpenAd();
 
-  void loadAds() {
-    InterstitialAdUtils.loadInterstitialAd();
-    if (isProFeatureEnable) {
-      RewardedAdUtils.loadRewardAd();
+      /// Interstitial Ad
+      InterstitialAdUtils.loadInterstitialAd();
+
+      /// Rewarded Ad
+      if (isProFeatureEnable) {
+        RewardedAdUtils.loadRewardAd();
+      }
     }
   }
 }
