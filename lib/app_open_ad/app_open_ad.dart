@@ -38,7 +38,11 @@ class AppOpenAdUtils {
           printLog('AdMob AppOpenAd Ad onAdLoaded:');
           _appOpenAd = ad;
           _numAdmobAppOpenLoadAttempts = 0;
-          if (_appOpenAd != null) _appOpenAd!.show();
+          if (_appOpenAd != null) {
+            Future.delayed(Duration(milliseconds: AdConfig.appOpenAdShowDelay)).then((value) {
+              _appOpenAd!.show();
+            });
+          }
         },
         onAdFailedToLoad: (error) {
           printLog('AdMob AppOpenAd Ad onAdFailedToLoad:');

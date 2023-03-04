@@ -34,6 +34,7 @@ class AdConfig {
   static bool isShowAllAdmobAds = false; // isShow_all_admob_ad
   static int maxFailedLoadAttempts = 1; // max_failed_load_attempts
   static bool isShowAppOpenAd = false; // isShow_app_open_ad
+  static int appOpenAdShowDelay = 1500; // app_open_ad_show_delay
 
   // static int firstCoolDowns = 30;
   // static int secondCoolDowns = 60;
@@ -57,6 +58,7 @@ class AdConfig {
     bool showAllAdmobAds = false,
     int maxFailedLoad = 1,
     bool showAppOpenAd = false,
+    int showAppOpenAdDelay = 1500,
     // int? firstCoolDown,
     // int? secondCoolDown,
   }) async {
@@ -79,6 +81,7 @@ class AdConfig {
     isShowAllAdmobAds = showAllAdmobAds;
     maxFailedLoadAttempts = maxFailedLoad;
     isShowAppOpenAd = showAppOpenAd;
+    appOpenAdShowDelay = showAppOpenAdDelay;
     // if (firstCoolDown != null) firstCoolDowns = firstCoolDown;
     // if (firstCoolDown != null) secondCoolDowns = firstCoolDown;
 
