@@ -79,8 +79,7 @@ TODO: The app will show open ads when the add open ad ID and `showAppOpenAd`  fl
 
 ```dart
   adMobAdOpenId: '',
-  showAppOpenAd: true,
-}  
+  showAppOpenAd: true,  
 ```
 
 TODO: Show Interstitial Ads
