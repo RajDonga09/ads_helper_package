@@ -34,6 +34,14 @@ TODO: Add in ymla file
       ref: master
 ```
 
+TODO: Add in AndroidManifest file for google AD
+
+```dart
+  <meta-data
+    android:name="com.google.android.gms.ads.APPLICATION_ID"
+    android:value="<YOUR-APPLICATION-ID>" />
+```
+
 TODO: Add in main.dart
 
 ```dart
@@ -42,6 +50,7 @@ TODO: Add in main.dart
 
   try {
     await AdConfig().init(
+      adMobAdOpenId: '',
       adMobBannerId: '',
       adMobInterstitialAdId: '',
       adMobRewardAdId: '',
@@ -56,11 +65,21 @@ TODO: Add in main.dart
       proFutureEnable: false,
       adFeatureEnable: true,
       showButtonAd: false,
-      showAllAdmobAds: true,
+      showAllAdmobAds: true, 
+      showAppOpenAd: true, 
+      showAppOpenAdDelay: 2000,
     );
   } catch (e) {
     print('!!!!!!!!! Error AdConfig $e');
   }
+}  
+```
+
+TODO: The app will show open ads when the add open ad ID and showAppOpenAd flag is enabled
+
+```dart
+  adMobAdOpenId: '',
+  showAppOpenAd: true,
 }  
 ```
 

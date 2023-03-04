@@ -92,7 +92,7 @@ class AdConfig {
     if (isShowFacebookTestAd) {
       printLog('!!!!!!!!!!! LOAD TESTING ADS !!!!!!!!!!!!!');
       FacebookAudienceNetwork.init(
-        // testingId: "194d0629-c335-4a12-b1b8-95b4a09efa85", // One Plush Nord (Raj) ID
+        // testingId: "194d0629-c335-4a12-b1b8-95b4a09efa85", // TODO: Add Your Device Testing ID (find in log when app run)
         iOSAdvertiserTrackingEnabled: true,
       );
     }
