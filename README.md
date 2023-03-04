@@ -75,7 +75,7 @@ TODO: Add in main.dart
 }  
 ```
 
-TODO: The app will show open ads when the add open ad ID and showAppOpenAd flag is enabled
+TODO: The app will show open ads when the add open ad ID and `showAppOpenAd`  flag is enabled
 
 ```dart
   adMobAdOpenId: '',
