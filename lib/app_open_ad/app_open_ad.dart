@@ -31,7 +31,6 @@ class AppOpenAdUtils {
 
     AppOpenAd.load(
       adUnitId: AdConfig.adMobAppOpenAdUnitId,
-      orientation: AppOpenAd.orientationPortrait,
       request: Constant.request,
       adLoadCallback: AppOpenAdLoadCallback(
         onAdLoaded: (ad) {
